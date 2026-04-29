@@ -3,6 +3,7 @@ package dev.richtext.codespace;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,6 +49,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -85,6 +87,9 @@ public class App extends Application {
     private CodeArea codeArea;
     private Label statusLabel;
     private Label fileLabel;
+    private Label cursorLabel;
+    private Label colorHelperLabel;
+    private Region colorSwatch;
     private TextArea terminalOutput;
     private TextField terminalInput;
     private TreeView<Path> projectTree;
@@ -104,6 +109,10 @@ public class App extends Application {
         projectTree = createProjectTree();
         statusLabel = new Label("Ready");
         fileLabel = new Label("Untitled");
+        cursorLabel = new Label("Ln 1, Col 1");
+        colorHelperLabel = new Label("No color under caret");
+        colorSwatch = new Region();
+        colorSwatch.getStyleClass().add("color-swatch");
 
         BorderPane root = new BorderPane();
         root.getStyleClass().add("app-shell");
@@ -112,7 +121,10 @@ public class App extends Application {
         root.setBottom(createStatusBar());
 
         Scene scene = new Scene(root, 1200, 760);
-        scene.getStylesheets().add(getClass().getResource("/editor.css").toExternalForm());
+        URL stylesheet = getClass().getResource("/editor.css");
+        if (stylesheet != null) {
+            scene.getStylesheets().add(stylesheet.toExternalForm());
+        }
 
         stage.setTitle("RichText CodeSpace");
         stage.setScene(scene);
@@ -136,7 +148,9 @@ public class App extends Application {
         editor.textProperty().addListener((ignore, oldText, newText) -> {
             modified = true;
             updateTitle();
+            updateEditorHelpers();
         });
+        editor.caretPositionProperty().addListener((ignore, oldPosition, newPosition) -> updateEditorHelpers());
 
         syntaxSubscription = editor
                 .multiPlainChanges()
@@ -144,6 +158,7 @@ public class App extends Application {
                 .subscribe(ignore -> editor.setStyleSpans(0, computeHighlighting(editor.getText())));
 
         editor.setStyleSpans(0, computeHighlighting(editor.getText()));
+        Platform.runLater(this::updateEditorHelpers);
         return editor;
     }
 
@@ -299,7 +314,13 @@ public class App extends Application {
     }
 
     private HBox createStatusBar() {
-        HBox statusBar = new HBox(16, statusLabel);
+        HBox spacer = new HBox();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox colorHelper = new HBox(8, colorSwatch, colorHelperLabel);
+        colorHelper.getStyleClass().add("color-helper");
+
+        HBox statusBar = new HBox(16, statusLabel, spacer, colorHelper, cursorLabel);
         statusBar.getStyleClass().add("status-bar");
         return statusBar;
     }
@@ -462,6 +483,56 @@ public class App extends Application {
 
     private void appendTerminal(String text) {
         Platform.runLater(() -> terminalOutput.appendText(text));
+    }
+
+    private void updateEditorHelpers() {
+        if (codeArea == null || cursorLabel == null || colorHelperLabel == null || colorSwatch == null) {
+            return;
+        }
+
+        int caret = Math.min(codeArea.getCaretPosition(), codeArea.getLength());
+        String beforeCaret = codeArea.getText(0, caret);
+        int line = 1;
+        int lineStart = 0;
+        for (int i = 0; i < beforeCaret.length(); i++) {
+            if (beforeCaret.charAt(i) == '\n') {
+                line++;
+                lineStart = i + 1;
+            }
+        }
+        cursorLabel.setText("Ln " + line + ", Col " + (caret - lineStart + 1));
+
+        String token = tokenBeforeCaret(beforeCaret);
+        if (token.startsWith("#") && token.length() > 1) {
+            updateColorPreview(token);
+        } else {
+            colorHelperLabel.setText("No color under caret");
+            colorSwatch.setStyle("");
+        }
+    }
+
+    private String tokenBeforeCaret(String beforeCaret) {
+        int start = beforeCaret.length();
+        while (start > 0) {
+            char ch = beforeCaret.charAt(start - 1);
+            if (Character.isWhitespace(ch) || ch == ';' || ch == ':' || ch == ',' || ch == ')' || ch == '(' || ch == '"' || ch == '\'') {
+                break;
+            }
+            start--;
+        }
+        return beforeCaret.substring(start);
+    }
+
+    private void updateColorPreview(String token) {
+        String color = token.replaceAll("[^#0-9a-fA-F]", "");
+        if (color.matches("#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})")) {
+            colorHelperLabel.setText("CSS color " + color);
+            colorSwatch.setStyle("-fx-background-color: " + color + ";");
+            return;
+        }
+
+        colorHelperLabel.setText("Typing color " + token);
+        colorSwatch.setStyle("");
     }
 
     private void status(String text) {
