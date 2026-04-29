@@ -1,0 +1,201 @@
+.root {
+    -fx-font-family: "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+    -fx-base: #171b24;
+    -fx-background: #171b24;
+    -fx-control-inner-background: #10141c;
+    -fx-accent: #ffb454;
+    -fx-focus-color: #ffb454;
+    -fx-faint-focus-color: transparent;
+}
+
+.app-shell {
+    -fx-background-color: linear-gradient(to bottom right, #111722, #1d2330 54%, #22251e);
+}
+
+.menu-bar {
+    -fx-background-color: #121720;
+    -fx-border-color: #2c3342;
+    -fx-border-width: 0 0 1 0;
+}
+
+.menu-bar .label,
+.menu-item .label {
+    -fx-text-fill: #d8dee9;
+}
+
+.context-menu {
+    -fx-background-color: #171d28;
+    -fx-border-color: #3a4252;
+}
+
+.menu-item:focused {
+    -fx-background-color: #2f3747;
+}
+
+.main-toolbar {
+    -fx-background-color: rgba(26, 32, 44, 0.94);
+    -fx-border-color: #2c3342;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 8 10;
+}
+
+.button {
+    -fx-background-color: #273142;
+    -fx-background-radius: 6;
+    -fx-border-color: #3b4658;
+    -fx-border-radius: 6;
+    -fx-text-fill: #edf2ff;
+    -fx-padding: 6 12;
+}
+
+.button:hover {
+    -fx-background-color: #344054;
+    -fx-border-color: #ffb454;
+}
+
+.split-pane {
+    -fx-background-color: transparent;
+}
+
+.split-pane-divider {
+    -fx-background-color: #2b3342;
+    -fx-padding: 0 1 0 1;
+}
+
+.project-pane,
+.editor-pane,
+.terminal-pane {
+    -fx-background-color: rgba(15, 19, 27, 0.92);
+}
+
+.pane-title,
+.editor-header {
+    -fx-background-color: #181e2a;
+    -fx-border-color: #2c3342;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 9 12;
+    -fx-text-fill: #ffcc80;
+    -fx-font-weight: bold;
+}
+
+.tree-view {
+    -fx-background-color: #111722;
+    -fx-control-inner-background: #111722;
+    -fx-border-width: 0;
+}
+
+.tree-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b9c2d0;
+    -fx-padding: 5 8;
+}
+
+.tree-cell:selected {
+    -fx-background-color: #283347;
+    -fx-text-fill: #ffffff;
+}
+
+.bottom-tabs {
+    -fx-background-color: #10141c;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #151b25;
+}
+
+.tab {
+    -fx-background-color: #1b2230;
+}
+
+.tab:selected {
+    -fx-background-color: #273142;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #cbd5e1;
+}
+
+.empty-state {
+    -fx-text-fill: #8792a6;
+    -fx-padding: 18;
+}
+
+.terminal-output {
+    -fx-control-inner-background: #0b1018;
+    -fx-background-color: #0b1018;
+    -fx-text-fill: #c7d0df;
+    -fx-highlight-fill: #ffb454;
+    -fx-highlight-text-fill: #151922;
+    -fx-font-size: 12px;
+}
+
+.terminal-command-row {
+    -fx-background-color: #121923;
+    -fx-border-color: #2c3342;
+    -fx-border-width: 1 0 0 0;
+}
+
+.terminal-command-row .label {
+    -fx-text-fill: #ffb454;
+    -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-background-color: #0f151f;
+    -fx-background-radius: 6;
+    -fx-border-color: #334155;
+    -fx-border-radius: 6;
+    -fx-text-fill: #edf2ff;
+    -fx-prompt-text-fill: #677386;
+}
+
+.status-bar {
+    -fx-background-color: #d98324;
+    -fx-padding: 6 12;
+}
+
+.status-bar .label {
+    -fx-text-fill: #141820;
+    -fx-font-weight: bold;
+}
+
+.code-area {
+    -fx-background-color: #121722;
+    -fx-font-family: "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+    -fx-font-size: 13px;
+}
+
+.code-area .text {
+    -fx-fill: #d5d8e2;
+}
+
+.paragraph-box:has-caret {
+    -fx-background-color: #1b2533;
+}
+
+.line-number {
+    -fx-background-color: #0d121a;
+    -fx-text-fill: #5f6b7f;
+    -fx-padding: 0 10 0 10;
+}
+
+.keyword {
+    -fx-fill: #ffb454;
+    -fx-font-weight: bold;
+}
+
+.string {
+    -fx-fill: #8bd49c;
+}
+
+.comment {
+    -fx-fill: #7a8199;
+    -fx-font-style: italic;
+}
+
+.paren,
+.brace,
+.bracket,
+.semicolon {
+    -fx-fill: #7cc7ff;
+}

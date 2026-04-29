@@ -1,0 +1,37 @@
+.code-area {
+    -fx-background-color: #1f2330;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 13px;
+}
+
+.code-area .text {
+    -fx-fill: #d5d8e2;
+}
+
+.paragraph-box:has-caret {
+    -fx-background-color: #242a3a;
+}
+
+.line-number {
+    -fx-background-color: #181b26;
+    -fx-text-fill: #5b627a;
+    -fx-padding: 0 10 0 10;
+}
+
+.keyword {
+    -fx-fill: #ffd173;
+    -fx-font-weight: bold;
+}
+
+.string {
+    -fx-fill: #8bd49c;
+}
+
+.comment {
+    -fx-fill: #7a8199;
+    -fx-font-style: italic;
+}
+
+.paren, .brace, .bracket, .semicolon {
+    -fx-fill: #7cc7ff;
+}
